@@ -1,0 +1,8 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           org.psjava.site.SolutionSiteController.index()
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET /:siteCode/:problemId/:title org.psjava.site.SolutionSiteController.showSolution(siteCode:String, problemId:String, title:String)

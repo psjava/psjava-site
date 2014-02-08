@@ -1,0 +1,33 @@
+@(sourceCode: String, hints: List[String], siteCode:String,
+problemId:String) @main("one solution") {
+<script
+	src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
+
+<h4>PROBLEM INFORMATION</h4>
+<ul>
+	<li><a href="http://www.spoj.com/problems/@problemId">Problem statement</a></li>
+</ul>
+
+<h4>ATTENTION</h4>
+<ul>
+	<li class="text-warning">Before see the hints, Try to solve by
+		yourself.
+		</p>
+	<li class="text-warning">Before see the source code, Try to by
+		solve yourself.
+		</p>
+</ul>
+<h4>HINTS</h4>
+<ul>
+	@for(hint <- hints) {
+	<li>@hint</li> }
+</ul>
+
+<h4>SOURCE CODE</h4>
+<pre class="small prettyprint lang-java small-tab">@sourceCode</pre>
+<p>
+	For simplicity and to use the common algorithms, this solution is using
+	psjava library (<a href="http://psjava.org">http://psjava.org</a>)
+</p>
+<button type="button" class="btn btn-default">Copy to clipboard</button>
+}
