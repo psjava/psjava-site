@@ -1,7 +1,326 @@
-@(message: String)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>psjava - Java Algorithm Library for Problem Solving</title>
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("bootstrap-3.0.3-dist/dist/css/bootstrap.min.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+</head>
+<body style="padding-top: 60px;">
+	<div class="container">
+		<nav class="navbar navbar-default navbar-fixed-top" role="banner">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">psjava</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					@*
+					<ul class="nav navbar-nav">
+						<li><a href="/list/poj">POJ</a></li>
+					</ul>
+					<form class="navbar-form navbar-right" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+					*@
+				</div>
+			</div>
+		</nav>
+		<p>psjava - Java Algorithm Library for Problem Solving</p>
+		<p>psjava is a collection of implementations of algorithms and
+			data structures.</p>
+		<h3>Getting Started</h3>
+		<p>
+			Download <a
+				href="http://search.maven.org/remotecontent?filepath=org/psjava/psjava/0.1.10/psjava-0.1.10.jar">jar
+				file </a> or use maven.
+		</p>
+		<pre>
+			<code>&lt;dependency&gt;
+    &lt;groupId&gt;org.psjava&lt;/groupId&gt;
+    &lt;artifactId&gt;psjava&lt;/artifactId&gt;
+    &lt;version&gt;0.1.10&lt;/version&gt;
+&lt;/dependency&gt;</code>
+		</pre>
+		<p>
+			See some simple example : <a
+				href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/SortExample.java">Sort</a>,
+			<a
+				href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/MemoizationExample.java">Memoization</a>
+		</p>
 
-@main("Welcome to Play") {
+		<h3>Algorithms</h3>
+		<table class="table table-condensed table-hover">
+			<tr>
+				<th>Classification</th>
+				<th>Usage</th>
+				<th>Implementation</th>
+				<th>Problem</th>
+			</tr>
+			<tr>
+				<td>BFS (Breath-first Search)</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/BFSExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/bfs/BFS.java">BFS</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/spoj1841/Main.java">SPOJ-PPATH</a></td>
+			</tr>
+			<tr>
+				<td>Binary Search</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/BinarySearchExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/sequence/search/BinarySearchFirst.java">Binary
+						Search First</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/GoogleCodeJam2013Round1AProblemASolution.java">GCJ2013R1A-A</a></td>
+			</tr>
+			<tr>
+				<td>DFS (Depth-first Search)</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/DFSExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/dfs/DFSCore.java">DFS
+						Core</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/CodeForcesBetaRound95Div2DSubway.java"
+					title="Codeforces Beta Round #95 (Div. 2) D. Subway">CF95-D2D</a></td>
+			</tr>
+			<tr>
+				<td>Finding Negative Cycle</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/FindingNegativeCycleExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/shortestpath/NegativeCycleFinder.java">Negative
+						Cycle Finder</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/uva558/Main.java">UVA-558</a></td>
+			</tr>
+			<tr>
+				<td>GCD (Great Common Divisor)</td>
+				<td></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/math/numbertheory/GCD.java">GCD</a></td>
+				<td></td>
+			</tr>
 
-    @play20.welcome(message, style = "Java")
+			<tr>
+				<td>Prime Number Sieve</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/PrimeNumberSieveExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/math/numbertheory/SieveOfEratosthenes.java">Sieve
+						of Eratosthenes</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/spoj1841/Main.java">SPOJ-PPATH</a></td>
+			</tr>
 
-}
+			<tr>
+				<td rowspan=4>Sort</td>
+				<td rowspan=4><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/SortExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/sequence/sort/BubbleSort.java">Bubble
+						Sort</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/sequence/sort/InsertionSort.java">Insertion
+						Sort</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/sequence/sort/MergeSort.java">Merge
+						Sort</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/sequence/sort/RandomizedQuickSort.java">Randomized
+						Quick Sort</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Maximum Bipartite Matching</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/MaximumBipartiteMatchingExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/matching/HopcroftKarpAlgorithm.java">Hopcroft–Karp
+						algorithm</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/spoj377/Main.java">SPOJ-TAXI</a></td>
+			</tr>
+			<tr>
+				<td>Maximum Flow</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/MaximumFlowExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/flownetwork/FordFulkersonAlgorithm.java">Ford–Fulkerson
+						algorithm</a><br> <a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/flownetwork/EdmondsKarpAlgorithm.java">Edmonds–Karp
+						algorithm</a><br></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/uva820/Main.java">UVA-820</a></td>
+			</tr>
+			<tr>
+				<td>Memoization<br>(Dynamic Programming)
+				</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/MemoizationExample.java">Example</a></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td rowspan=4>Shortest Path</td>
+				<td rowspan=4><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/ShortestPathExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/shortestpath/Dijkstra.java">Dijkstra</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/CodeForcesAlphaRound20CDijkstra.java">CF20-C</a></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/shortestpath/BellmanFord.java">Bellman
+						Ford</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/shortestpath/FloydWarshall.java">Floyd
+						Warshall</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/uva567/Main.java">UVA-567</a></td>
+			</tr>
+			<tr>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/algo/graph/shortestpath/Johnson.java">Johnson</a></td>
+				<td></td>
+			</tr>
+		</table>
+
+
+		<h3>Data Structures</h3>
+
+		<table class="table table-condensed table-hover">
+			<tr>
+				<th>Name</th>
+				<th>Usage</th>
+				<th>Implementation</th>
+				<th>Problem</th>
+			</tr>
+			<tr>
+				<td>Array</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/ArrayExample.java">Example</a></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Disjoint Set (A.K.A. Union-Find)</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/DisjointSetExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/set/DisjointSetForest.java">Disjoint
+						Set Forest</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Dynamic Array</td>
+				<td></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/array/DynamicArray.java">Dynamic
+						Array</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Heap</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/HeapExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/heap/BinaryHeap.java">Binary
+						Heap</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Queue</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/QueueExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/queue/QueueFactoryUsingDeque.java">Using
+						Deque</a></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Segment Tree (Single Element Updatable)</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/SegmentTreeExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/tree/segmenttree/SegmentTreeByArrayImplementation.java">Segment
+						Tree</a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/GoogleCodeJam2008Round1CProblemCSolution.java">GCJ2008R1C-C</a></td>
+			</tr>
+			<tr>
+				<td>Segment Tree (Range Updatable)</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/SegmentTreeWhichIsRangeUpdatableExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/tree/segmenttree/EnhancedRangeUpdatableSegmentTree.java">Lazy
+						Propagation Segment Tree </a></td>
+				<td><a
+					href="https://github.com/psjava/solutions/blob/master/src/main/java/org/psjava/solutions/code/poj3468/Main.java">POJ-3468</a></td>
+			</tr>
+			<tr>
+				<td>Stack</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/StackExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/stack/StackFactoryUsingDynamicArray.java">Using
+						Dynamic Array</a><br> <a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/stack/StackFactoryUsingLinkedList.java">Using
+						Linked List</a><br></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Trie</td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/test/java/org/psjava/example/TrieExample.java">Example</a></td>
+				<td><a
+					href="https://github.com/psjava/psjava/blob/psjava-0.1.10/src/main/java/org/psjava/ds/tree/trie/Trie.java">Trie</a></td>
+				<td></td>
+			</tr>
+		</table>
+
+		<h3>Contribution</h3>
+		<p>
+			<a href="https://github.com/psjava/psjava">View on GitHub</a>
+		</p>
+
+
+	</div>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42967591-1', 'psjava.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>

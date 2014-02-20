@@ -3,6 +3,6 @@
 # ~~~~
 
 # Home page
-GET     /                           org.psjava.site.SolutionSiteController.index()
+GET     /                           org.psjava.site.PsjavaSiteController.index()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-GET /:siteCode/:problemId/:title org.psjava.site.SolutionSiteController.showSolution(siteCode:String, problemId:String, title:String)
+# GET /:siteCode/:problemId/:title org.psjava.site.SolutionSiteController.showSolution(siteCode:String, problemId:String, title:String)
