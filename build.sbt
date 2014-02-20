@@ -1,4 +1,4 @@
-name := "solutions"
+name := "psjava-site"
 
 version := "1.0-SNAPSHOT"
 
