@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+
+import models.Item;
+
 import org.junit.*;
 
 import play.mvc.*;
@@ -15,7 +19,7 @@ public class ApplicationTest {
 
 	@Test
 	public void renderTemplate() {
-		Content html = views.html.index.render();
+		Content html = views.html.index.render(new ArrayList<Item>(), new ArrayList<Item>());
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("psjava");
 	}

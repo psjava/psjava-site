@@ -4,4 +4,6 @@
 
 # Home page
 GET     /                           org.psjava.site.PsjavaSiteController.index()
+GET     /ds/:id                           org.psjava.site.PsjavaSiteController.showDs(id:String)
+GET     /algo/:id                           org.psjava.site.PsjavaSiteController.showAlgo(id:String)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
