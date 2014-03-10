@@ -1,13 +1,13 @@
-@(content: Html)
+@(title:String)(description:String)(content: Html)
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="psjava is a collection of implementations of algorithms and data structures.">
+<meta name="description" content="@description">
 <meta name="author" content="psjava team">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>psjava - Java Algorithm Library for Problem Solving</title>
+<title>@title</title>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("bootstrap-3.0.3-dist/dist/css/bootstrap.min.css")">
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 </head>

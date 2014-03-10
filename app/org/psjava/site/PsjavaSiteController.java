@@ -59,7 +59,7 @@ public class PsjavaSiteController extends Controller {
 		System.out.println(path);
 		String example = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), path);
 		AssertStatus.assertTrue(example != null);
-		return ok(detail.render(id, example));
+		return ok(detail.render(id.replace('_', ' '), example));
 	}
 
 	protected static String extractName(String path, String pathPrefix) {
