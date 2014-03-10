@@ -2,7 +2,7 @@
 <p>psjava - Java Algorithm Library for Problem Solving</p>
 <p>psjava is a collection of implementations of algorithms and data
 	structures.</p>
-<h3>Getting Started</h3>
+<h3 id="title-getting-started">Getting Started</h3>
 <p>
 	Download <a
 		href="http://search.maven.org/remotecontent?filepath=org/psjava/psjava/0.1.10/psjava-0.1.10.jar">jar
@@ -21,31 +21,27 @@
 </p>
 
 
-<h3>Algorithms</h3>
+<h3 id="title-algorithms">Algorithms</h3>
 <table class="table table-condensed table-hover">
 	<tr>
 		<th>Keyword</th>
-		<th>Example</th>
 	</tr>
 	@for(item <- algoItemList) {
-	<tr>
-		<td>@item.name</td>
-		<td><a href="/algo/@item.id">Example</a></td>
-	</tr>
+		<tr>
+			<td><a href="/algo/@item.id">@item.name</a></td>
+		</tr>
 	}
 </table>
 
-<h3>Data Structures</h3>
+<h3 id="title-data-structures">Data Structures</h3>
 <table class="table table-condensed table-hover">
 	<tr>
 		<th>Keyword</th>
-		<th>Example</th>
 	</tr>
 	@for(item <- dsItemList) {
-	<tr>
-		<td>@item.name</td>
-		<td><a href="/ds/@item.id">Example</a></td>
-	</tr>
+		<tr>
+			<td><a href="/ds/@item.id">@item.name</a></td>
+		</tr>
 	}
 </table>
 <!-- 
@@ -296,9 +292,4 @@
 </table>
 
  -->
-
-<h3>Contribution</h3>
-<p>
-	<a href="https://github.com/psjava/psjava">View on GitHub</a>
-</p>
 }
