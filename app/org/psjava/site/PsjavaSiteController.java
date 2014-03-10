@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipException;
 
 import models.Item;
@@ -27,16 +28,16 @@ public class PsjavaSiteController extends Controller {
 
 	public static Result index() throws IOException {
 		File zipFile = getZipFile();
-		ArrayList<Item> r = extractItems(zipFile, DS_PATH_PREFIX);
-		ArrayList<Item> r2 = extractItems(zipFile, ALGO_PATH_PREFIX);
-		return ok(index.render(r, r2));
+		List<Item> ds = extractItems(zipFile, DS_PATH_PREFIX);
+		List<Item> algo = extractItems(zipFile, ALGO_PATH_PREFIX);
+		return ok(index.render(ds, algo));
 	}
 
 	private static File getZipFile() {
 		return Play.getFile("file-resources/psjava-master.zip", Play.current());
 	}
 
-	private static ArrayList<Item> extractItems(File zipFile, String pathPrefix) throws ZipException, IOException {
+	private static List<Item> extractItems(File zipFile, String pathPrefix) throws ZipException, IOException {
 		Collection<String> subEntries = ZipUtil.getSubEntries(zipFile, pathPrefix);
 		ArrayList<Item> r = new ArrayList<Item>();
 		for (String path : subEntries) {
@@ -56,7 +57,6 @@ public class PsjavaSiteController extends Controller {
 
 	private static Result showDetail(String pathPrefix, String id) throws ZipException, IOException, UnsupportedEncodingException {
 		String path = pathPrefix + id.replace("_", "") + SUFFIX;
-		System.out.println(path);
 		String example = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), path);
 		AssertStatus.assertTrue(example != null);
 		return ok(detail.render(id.replace('_', ' '), example));
