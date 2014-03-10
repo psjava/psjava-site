@@ -1,10 +1,18 @@
 package org.psjava.site;
 
+import japa.parser.JavaParser;
+import japa.parser.ParseException;
+import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.visitor.VoidVisitorAdapter;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipException;
 
 import models.Item;
@@ -12,6 +20,8 @@ import models.Item;
 import org.psjava.ds.Collection;
 import org.psjava.site.util.ZipUtil;
 import org.psjava.util.AssertStatus;
+import org.psjava.util.DataKeeper;
+import org.psjava.util.ZeroTo;
 
 import play.api.Play;
 import play.mvc.Controller;
@@ -57,19 +67,42 @@ public class PsjavaSiteController extends Controller {
 		return r;
 	}
 
-	public static Result showDs(String id) throws IOException {
+	public static Result showDs(String id) throws IOException, ParseException {
 		return showDetail(DS_PATH_PREFIX, id);
 	}
 
-	public static Result showAlgo(String id) throws IOException {
+	public static Result showAlgo(String id) throws IOException, ParseException {
 		return showDetail(ALGO_PATH_PREFIX, id);
 	}
 
-	private static Result showDetail(String pathPrefix, String id) throws ZipException, IOException, UnsupportedEncodingException {
+	private static Result showDetail(String pathPrefix, String id) throws ZipException, IOException, UnsupportedEncodingException, ParseException {
 		String path = pathPrefix + id.replace("_", "") + SUFFIX;
-		String example = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), path);
-		AssertStatus.assertTrue(example != null);
-		return ok(detail.render(id.replace('_', ' '), example));
+		final String content = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), path);
+		AssertStatus.assertTrue(content != null);
+
+		final DataKeeper<String> keeper = new DataKeeper<String>("");
+		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), "UTF-8");
+		new VoidVisitorAdapter<Object>() {
+			@SuppressWarnings("unused")
+			@Override
+			public void visit(BlockStmt stmt, Object arg1) {
+				String body = "";
+				Scanner in = new Scanner(content);
+				for (int i : ZeroTo.get(stmt.getBeginLine()))
+					in.nextLine();
+				for (int i : ZeroTo.get(Math.max(stmt.getEndLine() - stmt.getBeginLine() - 1, 0))) {
+					String line = in.nextLine();
+					if (!line.trim().startsWith("Assert.assert"))
+						if (line.startsWith("\t\t"))
+							body += line.substring(2) + "\n";
+						else
+							body += line + "\n";
+				}
+				keeper.set(body);
+				in.close();
+			}
+		}.visit(cu, null);
+		return ok(detail.render(id.replace('_', ' '), keeper.get()));
 	}
 
 	protected static String extractName(String path, String pathPrefix) {
