@@ -21,16 +21,26 @@ import views.html.index;
 
 public class PsjavaSiteController extends Controller {
 
-	private static final String EXAMPLE_PATH = "psjava-master/src/test/java/org/psjava/example";
+	private static final String PATH_PREFIX = "psjava-master/";
+	private static final String EXAMPLE_PATH = PATH_PREFIX + "src/test/java/org/psjava/example";
 	private static final String SUFFIX = "Example.java";
 	private static final String DS_PATH_PREFIX = EXAMPLE_PATH + "/ds/";
 	private static final String ALGO_PATH_PREFIX = EXAMPLE_PATH + "/algo/";
 
 	public static Result index() throws IOException {
 		File zipFile = getZipFile();
+		String version = extractVersionFromFile(zipFile);
 		List<Item> ds = extractItems(zipFile, DS_PATH_PREFIX);
 		List<Item> algo = extractItems(zipFile, ALGO_PATH_PREFIX);
-		return ok(index.render(ds, algo));
+		return ok(index.render(version, ds, algo));
+	}
+
+	private static String extractVersionFromFile(File zipFile) throws ZipException, IOException, UnsupportedEncodingException {
+		String text = ZipUtil.loadUTF8StringInZipFileOrNull(zipFile, PATH_PREFIX + "pom.xml");
+		String start = "<version>";
+		int s = text.indexOf(start);
+		int e = text.indexOf("</version>");
+		return text.substring(s + "<version>".length(), e);
 	}
 
 	private static File getZipFile() {
