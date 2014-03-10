@@ -102,7 +102,7 @@ public class PsjavaSiteController extends Controller {
 				in.close();
 			}
 		}.visit(cu, null);
-		return ok(detail.render(id.replace('_', ' '), keeper.get()));
+		return ok(detail.render(id.replace('_', ' '), keeper.get().trim()));
 	}
 
 	protected static String extractName(String path, String pathPrefix) {
