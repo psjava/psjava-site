@@ -3,6 +3,8 @@ package org.psjava.site;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
@@ -11,16 +13,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import models.Item;
 
 import org.psjava.ds.Collection;
+import org.psjava.ds.array.Array;
+import org.psjava.ds.array.DynamicArray;
+import org.psjava.site.util.StringUtil;
+import org.psjava.site.util.Util;
 import org.psjava.site.util.ZipUtil;
 import org.psjava.util.AssertStatus;
 import org.psjava.util.DataKeeper;
+import org.psjava.util.Pair;
 import org.psjava.util.ZeroTo;
 
 import play.api.Play;
@@ -32,10 +41,10 @@ import views.html.index;
 public class PsjavaSiteController extends Controller {
 
 	private static final String PATH_PREFIX = "psjava-master/";
-	private static final String EXAMPLE_PATH = PATH_PREFIX + "src/test/java/org/psjava/example";
-	private static final String SUFFIX = "Example.java";
-	private static final String DS_PATH_PREFIX = EXAMPLE_PATH + "/ds/";
-	private static final String ALGO_PATH_PREFIX = EXAMPLE_PATH + "/algo/";
+	private static final String EXAMPLE_PATH_IN_ZIP = PATH_PREFIX + "src/test/java/org/psjava/example";
+	private static final String EXAMPLE_FILE_SUFFIX = "Example.java";
+	private static final String DS_PATH_PREFIX = EXAMPLE_PATH_IN_ZIP + "/ds/";
+	private static final String ALGO_PATH_PREFIX = EXAMPLE_PATH_IN_ZIP + "/algo/";
 
 	public static Result index() throws IOException {
 		File zipFile = getZipFile();
@@ -60,11 +69,16 @@ public class PsjavaSiteController extends Controller {
 	private static List<Item> extractItems(File zipFile, String pathPrefix) throws ZipException, IOException {
 		Collection<String> subEntries = ZipUtil.getSubEntries(zipFile, pathPrefix);
 		ArrayList<Item> r = new ArrayList<Item>();
-		for (String path : subEntries) {
-			String name = extractName(path, pathPrefix);
-			r.add(new Item(name.replace(' ', '_'), name));
+		for (String pathInZip : subEntries) {
+			String name = extractName(pathInZip);
+			String id = getId(name);
+			r.add(new Item(id, name));
 		}
 		return r;
+	}
+
+	private static String getId(String name) {
+		return name.replace(' ', '_');
 	}
 
 	public static Result showDs(String id) throws IOException, ParseException {
@@ -76,39 +90,100 @@ public class PsjavaSiteController extends Controller {
 	}
 
 	private static Result showDetail(String pathPrefix, String id) throws ZipException, IOException, UnsupportedEncodingException, ParseException {
-		String path = pathPrefix + id.replace("_", "") + SUFFIX;
-		final String content = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), path);
+		final String content = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), pathPrefix + id.replace("_", "") + EXAMPLE_FILE_SUFFIX);
 		AssertStatus.assertTrue(content != null);
 
-		final DataKeeper<String> keeper = new DataKeeper<String>("");
 		CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), "UTF-8");
+		final DynamicArray<String> implementationSimpleClassName = DynamicArray.create();
+		final DynamicArray<String> seeAlsoClassName = DynamicArray.create();
 		new VoidVisitorAdapter<Object>() {
-			@SuppressWarnings("unused")
+			@Override
+			public void visit(ClassOrInterfaceDeclaration n, Object arg) {
+				JavadocComment docOrNull = n.getJavaDoc();
+				if (docOrNull == null)
+					return;
+				for (String line : StringUtil.toLines(docOrNull.getContent())) {
+					if (line.contains("@")) {
+						if (line.contains("@implementation")) {
+							implementationSimpleClassName.addToLast(extractSimpleClassNameFromTagLine(line));
+						} else if (line.contains("@see")) {
+							seeAlsoClassName.addToLast(extractSimpleClassNameFromTagLine(line));
+						} else {
+							throw new RuntimeException();
+						}
+					}
+				}
+			}
+		}.visit(cu, null);
+		final DataKeeper<String> exampleBody = new DataKeeper<String>("");
+		new VoidVisitorAdapter<Object>() {
 			@Override
 			public void visit(BlockStmt stmt, Object arg1) {
 				String body = "";
-				Scanner in = new Scanner(content);
-				for (int i : ZeroTo.get(stmt.getBeginLine()))
-					in.nextLine();
-				for (int i : ZeroTo.get(Math.max(stmt.getEndLine() - stmt.getBeginLine() - 1, 0))) {
-					String line = in.nextLine();
-					if (!line.trim().startsWith("Assert.assert"))
-						if (line.startsWith("\t\t"))
-							body += line.substring(2) + "\n";
-						else
-							body += line + "\n";
+				Array<String> lines = StringUtil.toLines(content);
+				for (int i : ZeroTo.get(lines.size())) {
+					if (stmt.getBeginLine() <= i && i < stmt.getEndLine() - 1) {
+						String line = lines.get(i);
+						if (!line.trim().startsWith("Assert.assert")) {
+							if (line.startsWith("\t\t"))
+								body += line.substring(2) + "\n";
+							else
+								body += line + "\n";
+						}
+					}
 				}
-				keeper.set(body);
-				in.close();
+				AssertStatus.assertTrue(exampleBody.get().length() == 0);
+				exampleBody.set(body);
 			}
 		}.visit(cu, null);
-		return ok(detail.render(id.replace('_', ' '), keeper.get().trim()));
+		AssertStatus.assertTrue(exampleBody.get().length() > 0);
+
+		DynamicArray<Pair<String, String>> impls = DynamicArray.create();
+		for (String s : implementationSimpleClassName) {
+			String pathInZip = getEntryPath("/" + s + ".java");
+			String code = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), pathInZip);
+			impls.addToLast(Pair.create(s, code));
+		}
+
+		DynamicArray<Pair<String, String>> seeAlsos = DynamicArray.create();
+		for (String s : seeAlsoClassName) {
+			String pathInZip = getEntryPath("/" + s + ".java");
+			String name = extractName(pathInZip);
+			String category = pathInZip.substring(EXAMPLE_PATH_IN_ZIP.length(), pathInZip.lastIndexOf('/'));
+			String urlPath = category + "/" + getId(name);
+			seeAlsos.addToLast(Pair.create(name, urlPath));
+		}
+
+		return ok(detail.render(getName(id), exampleBody.get().trim(), Util.toList(impls), Util.toList(seeAlsos)));
 	}
 
-	protected static String extractName(String path, String pathPrefix) {
-		AssertStatus.assertTrue(path.endsWith(SUFFIX));
-		String name = path.substring(pathPrefix.length(), path.length() - SUFFIX.length());
-		return getCamelResolved(name);
+	private static String getName(String id) {
+		return id.replace('_', ' ');
+	}
+
+	private static String getEntryPath(String suffix) throws ZipException, IOException {
+		ZipFile z = new ZipFile(getZipFile());
+		String pathOrNull = null;
+		try {
+			Enumeration<? extends ZipEntry> entries = z.entries();
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				if (entry.getName().endsWith(suffix)) {
+					AssertStatus.assertTrue(pathOrNull == null);
+					pathOrNull = entry.getName();
+				}
+			}
+		} finally {
+			z.close();
+		}
+		AssertStatus.assertTrue(pathOrNull != null);
+		return pathOrNull;
+	}
+
+	protected static String extractName(String pathInZip) {
+		AssertStatus.assertTrue(pathInZip.endsWith(EXAMPLE_FILE_SUFFIX));
+		String sub = pathInZip.substring(pathInZip.lastIndexOf('/') + 1, pathInZip.length() - EXAMPLE_FILE_SUFFIX.length());
+		return getCamelResolved(sub);
 	}
 
 	public static String getCamelResolved(String name) {
@@ -120,6 +195,12 @@ public class PsjavaSiteController extends Controller {
 			r += c;
 		}
 		return r;
+	}
+
+	private static String extractSimpleClassNameFromTagLine(String line) {
+		String temp = line.substring(line.indexOf("{@link")).trim();
+		temp = temp.replace("{@link", "").replace("}", "").trim();
+		return temp;
 	}
 
 }
