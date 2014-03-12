@@ -40,6 +40,7 @@ import views.html.index;
 
 public class PsjavaSiteController extends Controller {
 
+	private static final String REF_NAME = "master";
 	private static final String PATH_PREFIX = "psjava-master/";
 	private static final String EXAMPLE_PATH_IN_ZIP = PATH_PREFIX + "src/test/java/org/psjava/example";
 	private static final String EXAMPLE_FILE_SUFFIX = "Example.java";
@@ -141,8 +142,7 @@ public class PsjavaSiteController extends Controller {
 		DynamicArray<Pair<String, String>> impls = DynamicArray.create();
 		for (String s : implementationSimpleClassName) {
 			String pathInZip = getEntryPath("/" + s + ".java");
-			String code = ZipUtil.loadUTF8StringInZipFileOrNull(getZipFile(), pathInZip);
-			impls.addToLast(Pair.create(s, code));
+			impls.addToLast(Pair.create(s, "https://github.com/psjava/psjava/blob/" + REF_NAME + "/" + pathInZip.substring(PATH_PREFIX.length())));
 		}
 
 		DynamicArray<Pair<String, String>> seeAlsos = DynamicArray.create();
