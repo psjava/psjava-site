@@ -1,4 +1,4 @@
-@(name:String, example:String, implementations:List[org.psjava.util.Pair[String,String]], seeAlsos:List[org.psjava.util.Pair[String,String]])
+@(name:String, example:String, implementations:List[org.psjava.util.Pair[String,String]], seeAlsos:List[org.psjava.util.Triple[String,String,String]])
 @frame(name + " : psjava")("Implementation and example of " + name + " in Java") {
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/prettify-skin-desert-trunk.css")'>
 <script src='@routes.Assets.at("prettify-small-4-Mar-2013/google-code-prettify/prettify.js")'></script>
@@ -12,7 +12,7 @@
 @if(!seeAlsos.isEmpty) {
 	<h4>See Also</h4>
 	@for(seeAlso <- seeAlsos) {
-		<p><a href="@seeAlso.v2">@seeAlso.v1</a></p>
+		<p><a href="/@seeAlso.v2/@seeAlso.v3">@seeAlso.v1</a></p>
 	}
 }
 
