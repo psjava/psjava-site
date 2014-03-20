@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import models.Item;
 
 import org.json.JSONArray;
 import org.psjava.ds.array.Array;
 import org.psjava.ds.array.DynamicArray;
+import org.psjava.site.util.HttpUtil;
 import org.psjava.site.util.StringUtil;
 import org.psjava.site.util.Util;
 import org.psjava.util.AssertStatus;
@@ -27,13 +27,9 @@ import org.psjava.util.Pair;
 import org.psjava.util.Triple;
 import org.psjava.util.ZeroTo;
 
-import play.cache.Cache;
 import play.libs.F.Function;
-import play.libs.F.Function0;
 import play.libs.F.Promise;
-import play.libs.WS;
 import play.libs.WS.Response;
-import play.libs.WS.WSRequestHolder;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.detail;
@@ -52,9 +48,9 @@ public class PsjavaSiteController extends Controller {
 
 	@SuppressWarnings("unchecked")
 	public static Promise<Result> index() {
-		Promise<Response> pom = createUrlFetchPromise(GITHUB_RAW_ROOT + "/pom.xml", EMPTY_PARAM);
-		Promise<Response> ds = createUrlFetchPromise(DS_LIST_URL, createRefParam());
-		Promise<Response> algo = createUrlFetchPromise(ALGO_LIST_URL, createRefParam());
+		Promise<Response> pom = HttpUtil.createCacheableUrlFetchPromise(GITHUB_RAW_ROOT + "/pom.xml", EMPTY_PARAM);
+		Promise<Response> ds = HttpUtil.createCacheableUrlFetchPromise(DS_LIST_URL, createRefParam());
+		Promise<Response> algo = HttpUtil.createCacheableUrlFetchPromise(ALGO_LIST_URL, createRefParam());
 		return Promise.sequence(pom, ds, algo).map(new Function<List<Response>, Result>() {
 			@Override
 			public Result apply(List<Response> list) throws Throwable {
@@ -89,9 +85,9 @@ public class PsjavaSiteController extends Controller {
 	@SuppressWarnings("unchecked")
 	private static Promise<Result> showDetail(String categoryx, final String id) {
 		String exampleUrl = GITHUB_RAW_ROOT + "/" + EXAMPLE_PATH + "/" + categoryx + "/" + id.replace("_", "") + EXAMPLE_FILE_SUFFIX;
-		Promise<Response> example = createUrlFetchPromise(exampleUrl, EMPTY_PARAM);
-		Promise<Response> dsList = createUrlFetchPromise(DS_LIST_URL, createRefParam());
-		Promise<Response> algoList = createUrlFetchPromise(ALGO_LIST_URL, createRefParam());
+		Promise<Response> example = HttpUtil.createCacheableUrlFetchPromise(exampleUrl, EMPTY_PARAM);
+		Promise<Response> dsList = HttpUtil.createCacheableUrlFetchPromise(DS_LIST_URL, createRefParam());
+		Promise<Response> algoList = HttpUtil.createCacheableUrlFetchPromise(ALGO_LIST_URL, createRefParam());
 		return Promise.sequence(example, dsList, algoList).map(new Function<List<Response>, Result>() {
 			@Override
 			public Result apply(List<Response> list) throws Throwable {
@@ -177,31 +173,6 @@ public class PsjavaSiteController extends Controller {
 		return param;
 	}
 
-	private static Promise<Response> createUrlFetchPromise(String url, Map<String, String> params) {
-		final String key = "http:" + url + ":" + new TreeMap<String, String>(params).toString();
-		final Response cached = (Response) Cache.get(key);
-		if (cached == null) {
-			WSRequestHolder holder = WS.url(url);
-			for (String k : params.keySet())
-				holder.setQueryParameter(k, params.get(k));
-			Promise<Response> promise = holder.get();
-			return promise.map(new Function<Response, Response>() {
-				@Override
-				public Response apply(Response res) throws Throwable {
-					Cache.set(key, res);
-					return res;
-				}
-			});
-		} else {
-			return Promise.promise(new Function0<Response>() {
-				@Override
-				public Response apply() throws Throwable {
-					return cached;
-				}
-			});
-		}
-	}
-
 	private static String getName(String id) {
 		return id.replace('_', ' ');
 	}
@@ -249,7 +220,7 @@ public class PsjavaSiteController extends Controller {
 	}
 
 	public static Promise<Result> license() {
-		return createUrlFetchPromise(GITHUB_RAW_ROOT + "/LICENSE", EMPTY_PARAM).map(new Function<Response, Result>() {
+		return HttpUtil.createCacheableUrlFetchPromise(GITHUB_RAW_ROOT + "/LICENSE", EMPTY_PARAM).map(new Function<Response, Result>() {
 			@Override
 			public Result apply(Response arg0) throws Throwable {
 				return ok(views.html.license.render(arg0.getBody()));
