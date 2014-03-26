@@ -11,7 +11,7 @@
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("bootstrap-3.1.1-customized-9598904/css/bootstrap.min.css")">
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 </head>
-<body style="padding-top: 60px;">
+<body style="padding-top: 60px; margin-bottom:100px">
 	<script src="@routes.Assets.at("jquery-1.11.0.min.js")"></script>
 	<script src="@routes.Assets.at("bootstrap-3.1.1-customized-9598904/js/bootstrap.min.js")"></script>
 	<div class="container">
@@ -32,6 +32,7 @@
 						<li><a href="/#title-getting-started">Getting Started</a></li>
 						<li><a href="/#title-algorithms">Algorithms</a></li>
 						<li><a href="/#title-data-structures">Data Structures</a></li>
+						<li><a href="https://github.com/psjava/psjava">View on GitHub</a></li>
 					</ul>
 					@*
 					<form class="navbar-form navbar-right" role="search">
@@ -53,15 +54,13 @@
 					  <li><a href="/#title-getting-started">Getting Started</a></li>
 					  <li><a href="/#title-algorithms">Algorithms</a></li>
 					  <li><a href="/#title-data-structures">Data Structures</a></li>
-					  <li><a href="/license">License</a></li>
 					  <li><a href="https://github.com/psjava/psjava">View on GitHub</a></li>
 	  			</ul>
 			</div>
-			<div class="col-md-10">
-				@content
-			</div>
 		</div>
 *@
+		<hr>
+		<p class="text-center"><small>Copyright 2014 <a href="http://psjava.org">psjava team</a></small></p>
 	</div>
 
 <script>
@@ -78,7 +77,6 @@ $('.navbar-collapse a').click(function() {
 	ga('create', 'UA-42967591-1', 'psjava.org');
 	ga('send', 'pageview');
 </script>
-
 
 </body>
 </html>
