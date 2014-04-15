@@ -7,9 +7,6 @@
 
 <a href="http://www.google.com/search?q=@name">What is @name ?</a>
 
-<h4>Example Code</h4>
-<pre class="small prettyprint lang-java small-tab">@example</pre>
-
 @if(!seeAlsos.isEmpty) {
 	<h4>See Also</h4>
 	@for(seeAlso <- seeAlsos) {
@@ -17,10 +14,15 @@
 	}
 }
 
-<h4>Core Implementation</h4>
-@for(impl <- implementations) {
-	<p><a href="@impl.v2">@(impl.v1).java</a> in GitHub
+@if(!implementations.isEmpty) {
+	<h4>Core Implementation</h4>
+	@for(impl <- implementations) {
+		<p><a href="@impl.v2">@(impl.v1).java</a> in GitHub
+	}
 }
+
+<h4>Example Code</h4>
+<pre class="small prettyprint lang-java small-tab">@example</pre>
 
 <script>
 prettyPrint();
