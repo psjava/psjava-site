@@ -8,3 +8,4 @@ GET     /ds/:id                           org.psjava.site.PsjavaSiteController.s
 GET     /algo/:id                           org.psjava.site.PsjavaSiteController.showAlgo(id:String)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET /license org.psjava.site.PsjavaSiteController.license()
+GET /clear-cache org.psjava.site.PsjavaSiteController.clearCache()

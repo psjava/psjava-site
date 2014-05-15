@@ -81,6 +81,11 @@ public class PsjavaSiteController extends Controller {
 	public static Promise<Result> showAlgo(String id) {
 		return showDetail("algo", id);
 	}
+	
+	public static Result clearCache() {
+		HttpUtil.clearCached();
+		return redirect("/");
+	}
 
 	@SuppressWarnings("unchecked")
 	private static Promise<Result> showDetail(String categoryx, final String id) {
