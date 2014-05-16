@@ -1,28 +1,40 @@
-@(name:String, example:String, implementations:List[org.psjava.util.Pair[String,String]], seeAlsos:List[org.psjava.util.Triple[String,String,String]])
+@(version:String, name:String, example:String, implementations:List[org.psjava.util.Pair[String,String]], seeAlsos:List[org.psjava.util.Triple[String,String,String]])
 @frame(name + " in Java - psjava")("Implementation and example of " + name + " in Java") {
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/prettify-skin-desert-trunk.css")'>
 <script src='@routes.Assets.at("prettify-small-4-Mar-2013/google-code-prettify/prettify.js")'></script>
 
 <h2>@name</h2>
+<p><a href="http://www.google.com/search?q=@name">What is @name ?</a></p>
 
-<a href="http://www.google.com/search?q=@name">What is @name ?</a>
+<h4>Download</h4>
 
-@if(!seeAlsos.isEmpty) {
-	<h4>See Also</h4>
-	@for(seeAlso <- seeAlsos) {
-		<p><a href="/@seeAlso.v2/@seeAlso.v3">@seeAlso.v1</a></p>
-	}
-}
-
-@if(!implementations.isEmpty) {
-	<h4>Core Implementation</h4>
-	@for(impl <- implementations) {
-		<p><a href="@impl.v2">@(impl.v1).java</a> in GitHub
-	}
-}
+<p>Download <a href="http://search.maven.org/remotecontent?filepath=org/psjava/psjava/@version/psjava-@(version).jar">jar file</a> or use maven. psjava requires Java 1.6 (or above)</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.psjava&lt;/groupId&gt;
+    &lt;artifactId&gt;psjava&lt;/artifactId&gt;
+    &lt;version&gt;@version&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 
 <h4>Example Code</h4>
 <pre class="small prettyprint lang-java small-tab">@example</pre>
+
+@if(!seeAlsos.isEmpty) {
+	<h4>See Also</h4>
+	<ul>
+	@for(seeAlso <- seeAlsos) {
+		<li><a href="/@seeAlso.v2/@seeAlso.v3">@seeAlso.v1</a></li>
+	}
+	</ul>
+}
+
+@if(!implementations.isEmpty) {
+	<h4>Implementation</h4>
+	<ul>
+	@for(impl <- implementations) {
+		<li><a href="@impl.v2">@(impl.v1).java</a> in GitHub</li>
+	}
+	</ul>
+}
 
 <script>
 prettyPrint();

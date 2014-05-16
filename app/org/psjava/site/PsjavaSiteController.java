@@ -48,7 +48,7 @@ public class PsjavaSiteController extends Controller {
 
 	@SuppressWarnings("unchecked")
 	public static Promise<Result> index() {
-		Promise<Response> pom = HttpUtil.createCacheableUrlFetchPromise(GITHUB_RAW_ROOT + "/pom.xml", EMPTY_PARAM);
+		Promise<Response> pom = createPomFileReceivePromise();
 		Promise<Response> ds = HttpUtil.createCacheableUrlFetchPromise(DS_LIST_URL, createRefParam());
 		Promise<Response> algo = HttpUtil.createCacheableUrlFetchPromise(ALGO_LIST_URL, createRefParam());
 		return Promise.sequence(pom, ds, algo).map(new Function<List<Response>, Result>() {
@@ -61,6 +61,10 @@ public class PsjavaSiteController extends Controller {
 				return ok(index.render(version, ds, algo));
 			}
 		});
+	}
+
+	private static Promise<Response> createPomFileReceivePromise() {
+		return HttpUtil.createCacheableUrlFetchPromise(GITHUB_RAW_ROOT + "/pom.xml", EMPTY_PARAM);
 	}
 
 	private static String constructApiUrl(String dirPath) {
@@ -81,7 +85,7 @@ public class PsjavaSiteController extends Controller {
 	public static Promise<Result> showAlgo(String id) {
 		return showDetail("algo", id);
 	}
-	
+
 	public static Result clearCache() {
 		HttpUtil.clearCached();
 		return redirect("/");
@@ -90,15 +94,17 @@ public class PsjavaSiteController extends Controller {
 	@SuppressWarnings("unchecked")
 	private static Promise<Result> showDetail(String categoryx, final String id) {
 		String exampleUrl = GITHUB_RAW_ROOT + "/" + EXAMPLE_PATH + "/" + categoryx + "/" + id.replace("_", "") + EXAMPLE_FILE_SUFFIX;
+		Promise<Response> pom = createPomFileReceivePromise();
 		Promise<Response> example = HttpUtil.createCacheableUrlFetchPromise(exampleUrl, EMPTY_PARAM);
 		Promise<Response> dsList = HttpUtil.createCacheableUrlFetchPromise(DS_LIST_URL, createRefParam());
 		Promise<Response> algoList = HttpUtil.createCacheableUrlFetchPromise(ALGO_LIST_URL, createRefParam());
-		return Promise.sequence(example, dsList, algoList).map(new Function<List<Response>, Result>() {
+		return Promise.sequence(pom, example, dsList, algoList).map(new Function<List<Response>, Result>() {
 			@Override
 			public Result apply(List<Response> list) throws Throwable {
-				final String content = list.get(0).getBody();
-				List<Item> ds = extractItems(list.get(1));
-				List<Item> algo = extractItems(list.get(2));
+				String pomFileText = list.get(0).getBody();
+				final String content = list.get(1).getBody();
+				List<Item> ds = extractItems(list.get(2));
+				List<Item> algo = extractItems(list.get(3));
 
 				CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), "UTF-8");
 				final DynamicArray<String> implementationSimpleClassName = DynamicArray.create();
@@ -167,7 +173,7 @@ public class PsjavaSiteController extends Controller {
 						seeAlsos.addToLast(Triple.create(name, "algo", found2.id));
 				}
 
-				return ok(detail.render(getName(id), exampleBody.get().trim(), Util.toList(impls), Util.toList(seeAlsos)));
+				return ok(detail.render(extractVersion(pomFileText), getName(id), exampleBody.get().trim(), Util.toList(impls), Util.toList(seeAlsos)));
 			}
 		});
 	}
