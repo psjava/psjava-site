@@ -107,7 +107,7 @@ public class PsjavaSiteController extends Controller {
 				List<Item> algo = extractItems(list.get(3));
 
 				CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), "UTF-8");
-				final DynamicArray<String> implementationSimpleClassName = DynamicArray.create();
+				final DynamicArray<String> implementationClassName = DynamicArray.create();
 				final DynamicArray<String> seeAlsoClassName = DynamicArray.create();
 				new VoidVisitorAdapter<Object>() {
 					@Override
@@ -117,9 +117,11 @@ public class PsjavaSiteController extends Controller {
 							return;
 						for (String line : StringUtil.toLines(docOrNull.getContent())) {
 							if (line.contains("@")) {
-								if (line.contains("@implementation"))
-									implementationSimpleClassName.addToLast(extractSimpleClassNameFromTagLine(line));
-								else if (line.contains("@see")) {
+								if (line.contains("@implementation")) {
+									String simpleClassName = extractSimpleClassNameFromTagLine(line);
+									String className = getClassNameFromImport(content, simpleClassName);
+									implementationClassName.addToLast(className);
+								} else if (line.contains("@see")) {
 									if (line.contains("{@link")) // TODO remove from 0.1.17
 										seeAlsoClassName.addToLast(extractSimpleClassNameFromTagLine(line));
 								} else
@@ -152,9 +154,9 @@ public class PsjavaSiteController extends Controller {
 				AssertStatus.assertTrue(exampleBody.get().length() > 0);
 
 				DynamicArray<Pair<String, String>> impls = DynamicArray.create();
-				for (String s : implementationSimpleClassName) {
-					String className = getClassNameFromImport(content, s);
-					impls.addToLast(Pair.create(s, GITHUB_PAGE_ROOT + "/" + "src/main/java" + "/" + className.replace('.', '/') + ".java"));
+				for (String className : implementationClassName) {
+					String simpleClassName = className.substring(className.lastIndexOf('.'));
+					impls.addToLast(Pair.create(simpleClassName, GITHUB_PAGE_ROOT + "/" + "src/main/java" + "/" + className.replace('.', '/') + ".java"));
 				}
 
 				DynamicArray<Triple<String, String, String>> seeAlsos = DynamicArray.create();
