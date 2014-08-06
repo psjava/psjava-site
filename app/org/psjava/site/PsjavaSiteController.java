@@ -108,7 +108,7 @@ public class PsjavaSiteController extends Controller {
 
 				CompilationUnit cu = JavaParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), "UTF-8");
 				final DynamicArray<String> implementationClassName = DynamicArray.create();
-				final DynamicArray<String> seeAlsoClassName = DynamicArray.create();
+				final DynamicArray<String> seeAlsoSimpleClassName = DynamicArray.create();
 				new VoidVisitorAdapter<Object>() {
 					@Override
 					public void visit(ClassOrInterfaceDeclaration n, Object arg) {
@@ -118,12 +118,14 @@ public class PsjavaSiteController extends Controller {
 						for (String line : StringUtil.toLines(docOrNull.getContent())) {
 							if (line.contains("@")) {
 								if (line.contains("@implementation")) {
-									String simpleClassName = extractSimpleClassNameFromTagLine(line);
-									String className = getClassNameFromImport(content, simpleClassName);
-									implementationClassName.addToLast(className);
+									implementationClassName.addToLast(extractClassNameFromTagLine(line, content));
 								} else if (line.contains("@see")) {
-									if (line.contains("{@link")) // TODO remove from 0.1.17
-										seeAlsoClassName.addToLast(extractSimpleClassNameFromTagLine(line));
+									if (line.contains("{@link")) { // TODO this is temporary deal of BinarySearchExample 0.1.17. remove from 0.1.17
+										String classNameOrSimple = extractClassNameOrSimpleFromTagLine(line);
+										if(classNameOrSimple.contains("."))
+											classNameOrSimple = toSimpleClassName(classNameOrSimple);
+										seeAlsoSimpleClassName.addToLast(classNameOrSimple);
+									}
 								} else
 									throw new RuntimeException();
 							}
@@ -154,13 +156,11 @@ public class PsjavaSiteController extends Controller {
 				AssertStatus.assertTrue(exampleBody.get().length() > 0);
 
 				DynamicArray<Pair<String, String>> impls = DynamicArray.create();
-				for (String className : implementationClassName) {
-					String simpleClassName = className.substring(className.lastIndexOf('.'));
-					impls.addToLast(Pair.create(simpleClassName, GITHUB_PAGE_ROOT + "/" + "src/main/java" + "/" + className.replace('.', '/') + ".java"));
-				}
+				for (String className : implementationClassName)
+					impls.addToLast(Pair.create(toSimpleClassName(className), GITHUB_PAGE_ROOT + "/" + "src/main/java" + "/" + className.replace('.', '/') + ".java"));
 
 				DynamicArray<Triple<String, String, String>> seeAlsos = DynamicArray.create();
-				for (String s : seeAlsoClassName) {
+				for (String s : seeAlsoSimpleClassName) {
 					String name = extractName(s + ".java");
 					Item found = null;
 					for (Item item : ds)
@@ -179,6 +179,20 @@ public class PsjavaSiteController extends Controller {
 				return ok(detail.render(extractVersion(pomFileText), getName(id), exampleBody.get().trim(), Util.toList(impls), Util.toList(seeAlsos)));
 			}
 		});
+	}
+
+	private static String extractClassNameFromTagLine(String line, String content) {
+		String classNameOrSimple = extractClassNameOrSimpleFromTagLine(line);
+		String className;
+		if(classNameOrSimple.contains("."))
+			className = classNameOrSimple;
+		else
+			className = getClassNameFromImport(content, classNameOrSimple);
+		return className;
+	}
+
+	private static String toSimpleClassName(String className) {
+		return className.substring(className.lastIndexOf('.')+1);
 	}
 
 	private static Map<String, String> createRefParam() {
@@ -208,7 +222,7 @@ public class PsjavaSiteController extends Controller {
 		return r;
 	}
 
-	private static String extractSimpleClassNameFromTagLine(String line) {
+	private static String extractClassNameOrSimpleFromTagLine(String line) {
 		String temp = line.substring(line.indexOf("{@link")).trim();
 		temp = temp.replace("{@link", "").replace("}", "").trim();
 		return temp;
