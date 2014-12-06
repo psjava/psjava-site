@@ -1,6 +1,6 @@
 name := "psjava-site"
 
-version := "1.10-SNAPSHOT"
+version := "1.10"
 
 libraryDependencies ++= Seq(
   javaJdbc,
