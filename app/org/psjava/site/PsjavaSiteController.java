@@ -161,6 +161,8 @@ public class PsjavaSiteController extends Controller {
 
 				DynamicArray<Triple<String, String, String>> seeAlsos = DynamicArray.create();
 				for (String s : seeAlsoSimpleClassName) {
+					if(s.contains("BinarySearch")) // TODO remove after 0.1.18
+						continue;
 					String name = extractName(s + ".java");
 					Item found = null;
 					for (Item item : ds)
