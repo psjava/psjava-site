@@ -41,7 +41,7 @@ public class PsjavaSiteController extends Controller {
 	private static final String ALGO_LIST_URL = constructApiUrl("src/test/java/org/psjava/example/algo");
 	private static final String DS_LIST_URL = constructApiUrl("src/test/java/org/psjava/example/ds");
 	private static final String EXAMPLE_PATH = "src/test/java/org/psjava/example";
-	private static final String REF_NAME = "psjava-0.1.17";
+	private static final String REF_NAME = "psjava-0.1.18";
 	private static final String GITHUB_RAW_ROOT = "https://raw.github.com/psjava/psjava/" + REF_NAME;
 	private static final String GITHUB_PAGE_ROOT = "https://github.com/psjava/psjava/blob/" + REF_NAME;
 	private static final String EXAMPLE_FILE_SUFFIX = "Example.java";
