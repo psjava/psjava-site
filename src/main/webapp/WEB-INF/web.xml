@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <filter>
+        <filter-name>filter</filter-name>
+        <filter-class>org.psjava.site.MainFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>all</servlet-name>
         <servlet-class>org.psjava.site.MainServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>all</servlet-name>
-        <url-pattern>/license</url-pattern>
+        <url-pattern>/page/*</url-pattern>
     </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
 </web-app>

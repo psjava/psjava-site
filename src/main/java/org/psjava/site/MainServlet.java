@@ -13,8 +13,11 @@ public class MainServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String path = req.getServletPath();
-		if (path.equals("/license")) {
+		String path = req.getPathInfo();
+//		System.out.println(req.getServletPath() + ":" + req.getContextPath() + ":" + req.getRequestURL() + ":" + req.getPathInfo() + ":");
+		if(path.equals("/")) {
+			forward(this, req, res, "index.jsp");
+		} else if (path.equals("/license")) {
 			req.setAttribute("licenseText", CachedHttpClient.getBody(GITHUB_RAW_ROOT + "/LICENSE"));
 			forward(this, req, res, "license.jsp");
 		} else {
