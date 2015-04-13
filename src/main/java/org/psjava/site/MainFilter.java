@@ -21,7 +21,7 @@ public class MainFilter implements Filter {
 		if (path.startsWith("/WEB-INF/")) {
 			filterChain.doFilter(servletRequest, servletResponse); // Goes to default servlet.
 		} else {
-			servletRequest.getRequestDispatcher("/page" + path).forward(servletRequest, servletResponse);
+			servletRequest.getRequestDispatcher("/servlet" + path).forward(servletRequest, servletResponse);
 		}
 	}
 
