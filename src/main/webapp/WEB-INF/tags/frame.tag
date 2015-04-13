@@ -1,11 +1,12 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@attribute name="title" required="true"%>
+<%@attribute name="description" required="true"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="@description">
+    <meta name="description" content="${description}">
     <meta name="author" content="psjava team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>${title}</title>

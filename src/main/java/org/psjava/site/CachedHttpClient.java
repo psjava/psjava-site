@@ -3,6 +3,7 @@ package org.psjava.site;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -17,7 +18,20 @@ public class CachedHttpClient {
 	}
 
 	private static String receiveBody(String url) throws IOException {
-		try (InputStream is = new URL(url).openStream()) {
+		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+		connection.setRequestProperty("User-Agent", "pure java");
+		connection.setDoOutput(false);
+		int code = connection.getResponseCode();
+		String body = readBody(connection);
+		if (code == HttpURLConnection.HTTP_OK) {
+			return body;
+		} else {
+			throw new RuntimeException(code + "\n" + body);
+		}
+	}
+
+	private static String readBody(HttpURLConnection connection) throws IOException {
+		try(InputStream is = connection.getInputStream()) {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			while (true) {
 				int read = is.read();
