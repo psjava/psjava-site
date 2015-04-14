@@ -4,7 +4,7 @@
 <t:frame title="psjava - Java Algorithm Library for Problem Solving" description="psjava is an open source library which contains implementations of algorithms and data structures">
 
 <p>psjava - Java Algorithm Library for Problem Solving</p>
-<p>psjava is a collection of implementations of algorithms and data structures. And open source project. <a href="https://github.com/psjava/psjava">View on GitHub</a></p>
+<p>psjava is a collection of implementations of algorithms and data structures.</p>
 <p>psjava is designed to provide flexibility and customizability. For example, you can choose heap implementation for Dijkstra's Algorithm. And also you can run it with a graph which has any weight number system, like 32bit integer or even BigInteger. See the detail in <a href="algo/Dijkstra_Algorithm">Dijkstra Algorithm Example</a></p>
 
 <span id="title-download" class="anchor"></span>
