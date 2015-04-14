@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:frame title="${name} in Java - psjava" description="Implementation and example of ${name} in Java">
+<t:frame title="${requestScope.name} in Java - psjava" description="Implementation and example of ${requestScope.name} in Java">
 <link rel="stylesheet" media="screen" href="/stylesheets/prettify-skin-desert-trunk.css">
 <script src="/prettify-small-4-Mar-2013/google-code-prettify/prettify.js"></script>
 
-<h2>${name}</h2>
-<p><a href="http://www.google.com/search?q=${name}">What is ${name} ?</a></p>
+<h2>${requestScope.name}</h2>
+<p><a href="http://www.google.com/search?q=${requestScope.name}">What is ${requestScope.name} ?</a></p>
 
 <h4>Download</h4>
 
