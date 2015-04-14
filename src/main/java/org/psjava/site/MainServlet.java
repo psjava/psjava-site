@@ -12,7 +12,6 @@ import org.psjava.ds.array.Array;
 import org.psjava.ds.array.DynamicArray;
 import org.psjava.util.AssertStatus;
 import org.psjava.util.DataKeeper;
-import org.psjava.util.Triple;
 import org.psjava.util.ZeroTo;
 
 import javax.servlet.ServletException;
@@ -59,6 +58,10 @@ public class MainServlet extends HttpServlet {
 			return "license.jsp";
 		} else if(path.startsWith("/ds/")) {
 			String category = "ds";
+			String id = path.substring(category.length()+2);
+			return processDetail(attributeSettable, category, id);
+		} else if(path.startsWith("/algo/")) {
+			String category = "algo";
 			String id = path.substring(category.length()+2);
 			return processDetail(attributeSettable, category, id);
 		} else {
