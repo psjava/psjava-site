@@ -1,8 +1,0 @@
-.small-tab {
-	-moz-tab-size: 2;
-	-o-tab-size: 2;
-	-webkit-tab-size: 2;
-	-ms-tab-size: 2;
-	tab-size: 2;
-}
-.anchor{display: block; position: relative; top: -60px; visibility: hidden;}
