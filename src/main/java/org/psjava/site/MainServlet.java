@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class MainServlet extends HttpServlet {
 
-	private static final String REF_NAME = "psjava-0.1.18";
+	private static final String REF_NAME = "psjava-0.1.19";
 	private static final String GITHUB_RAW_ROOT = "https://raw.github.com/psjava/psjava/" + REF_NAME;
 	private static final String ALGO_LIST_URL = constructApiUrl("src/test/java/org/psjava/example/algo");
 	private static final String DS_LIST_URL = constructApiUrl("src/test/java/org/psjava/example/ds");
