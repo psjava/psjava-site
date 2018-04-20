@@ -7,7 +7,7 @@
     <version>1.12-SNAPSHOT</version>
 
     <groupId>org.psjava</groupId>
-    <artifactId>site</artifactId>
+    <artifactId>psjava-site</artifactId>
 
     <properties>
         <appengine.app.version>1</appengine.app.version>
